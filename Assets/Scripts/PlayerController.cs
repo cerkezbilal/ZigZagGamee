@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Vector3 yon = Vector3.left;
 
     [SerializeField] float speed;
+    int bestScore = 0;
 
     public GroundSpawner groundSpawner;
 
@@ -20,10 +21,14 @@ public class PlayerController : MonoBehaviour
     float artisMiktari = 1f;
 
     [SerializeField]
-    Text scoreText;
+    Text scoreText, bestScoreText;
 
+    private void Start()
+    {
+        bestScore = PlayerPrefs.GetInt("BestScore");
+        bestScoreText.text = "Best: "+ bestScore.ToString();
+    }
 
-   
 
     private void Update()
     {
@@ -48,6 +53,11 @@ public class PlayerController : MonoBehaviour
         if(transform.position.y < 0.1f)
         {
             isDead = true;
+            if(bestScore < score)
+            {
+                bestScore = (int) score;
+                PlayerPrefs.SetInt("BestScore", bestScore);
+            }
             
             Destroy(this.gameObject, 3f);
         }
@@ -55,6 +65,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         Vector3 hareket = yon * speed * Time.deltaTime;//objemizin hareket değeri
         speed += Time.deltaTime * hizlanmaZorlugu;
         transform.position += hareket;//hareket değerini sürekli pozisyonuma ekle
