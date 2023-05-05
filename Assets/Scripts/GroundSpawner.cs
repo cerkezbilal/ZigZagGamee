@@ -15,7 +15,7 @@ public class GroundSpawner : MonoBehaviour
         }
     }
 
-    void ZeminOlustur()
+    public void ZeminOlustur()
     {
         Vector3 yon;
 
